@@ -8,7 +8,7 @@ Create Table departments(
 
 Create Table employees(
 	emp_no INT NOT NULL, 
-	brith_date Date NOT NULL, 
+	birth_date Date NOT NULL, 
 	first_name VARCHAR NOT NULL, 
 	last_name VARCHAR NOT NULL, 
 	gender VARCHAR NOT NULL, 
@@ -45,6 +45,7 @@ Create Table dept_emp (
 	Primary Key (emp_no, dept_no)
 );
 
+--Had issues using code below when uploading the data had to change code
 Create Table titles (
 	emp_no Int Not Null, 
 	title Varchar Not Null, 
@@ -54,4 +55,13 @@ Create Table titles (
 	Primary Key (emp_no)
 ); 
 
+--Updated code inorder to upload corresponding csv data 
+CREATE TABLE titles (
+  emp_no INT NOT NULL,
+  title VARCHAR(50) NOT NULL,
+  from_date DATE NOT NULL,
+  to_date DATE,
+  FOREIGN KEY (emp_no) REFERENCES employees (emp_no),
+  PRIMARY KEY (emp_no, title, from_date)
+);
 Select * From departments; 
