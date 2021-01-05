@@ -66,3 +66,73 @@ From retirement_info as ri
 Left join dept_emp as de 
 On ri.emp_no = de.emp_no
 Where de.to_date = ('9999-01-01')
+
+Drop table emp_info; 
+
+--Creating first list to include more info about employees and their salaries
+--First create a temp table with joining three tables
+Select e.emp_no, 
+	e.first_name, 
+	e.last_name, 
+	s.salary, 
+	de.to_date
+Into emp_info 
+From employees as e
+Inner join salaries as s 
+On (e.emp_no = s.emp_no)
+Inner join dept_emp as de
+On (e.emp_no = de.emp_no)
+WHERE (birth_date BETWEEN '1952-01-01' AND '1955-12-31')
+	AND (hire_date BETWEEN '1985-01-01' AND '1988-12-31')
+	AND (de.to_date = '9999-01-01');
+	
+--Create second list of managers that are retiring 
+Select dm.dept_no, 
+	d.dept_name, 
+	dm.emp_no, 
+	ce.last_name, 
+	ce.first_name, 
+	dm.from_date, 
+	dm.to_date 
+Into manager_info
+From dept_manager as dm
+	Inner Join departments as d
+		on(dm.dept_no =d.dept_no)
+	Inner Join current_emp as ce 
+		on(dm.emp_no = ce.emp_no);
+		
+--Third List of department retirees
+Select ce.emp_no, 
+	ce.first_name, 
+	ce.last_name, 
+	d.dept_name
+Into dept_info
+From current_emp as ce
+Inner join dept_emp as de
+On (ce.emp_no = de.emp_no)
+Inner join departments as d
+On (de.dept_no = d.dept_no);
+
+Select * from retiring_emp_dept; 
+
+--Specific tables for sales team that looks for em #, em first name, last name and department 
+Select ri.emp_no, 
+	ri.first_name, 
+	ri.last_name,
+	de.dept_no
+Into sales_retiring_info
+From retirement_info as ri 
+Inner join dept_emp as de 
+On (ri.emp_no = de.emp_no)
+Where de.dept_no = 'd007';
+
+--Select info for both sales and development teams 
+Select ri.emp_no, 
+	ri.first_name, 
+	ri.last_name,
+	de.dept_no
+Into sales_development_info
+From retirement_info as ri 
+Inner join dept_emp as de 
+On (ri.emp_no = de.emp_no)
+Where de.dept_no in ('d007', 'd005');
